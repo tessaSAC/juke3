@@ -1,42 +1,21 @@
 'use strict';
 
-/* ARTISTS (PLURAL) CONTROLLER */
-
-juke.controller('ArtistsCtrl', function ($scope, $log, $rootScope, ArtistFactory) {
-
-  $scope.$on('viewSwap', function (event, data) {
-    if (data.name !== 'allArtists') return $scope.showMe = false;
-    $scope.showMe = true;
-  });
-
-  $scope.viewOneArtist = function (artist) {
-    $rootScope.$broadcast('viewSwap', { name: 'oneArtist', id: artist.id });
-  };
-
-  ArtistFactory.fetchAll()
-  .then(function (artists) {
-    $scope.artists = artists;
-  })
-  .catch($log.error);
-
-});
-
 /* ARTIST (SINGULAR) CONTROLLER */
 
-juke.controller('ArtistCtrl', function ($scope, $log, ArtistFactory, PlayerFactory, $rootScope) {
+juke.controller('SingleArtistController', function ($scope, $log, $stateParams, ArtistFactory, PlayerFactory, $rootScope) {
 
-  $scope.$on('viewSwap', function (event, data) {
+  // $scope.$on('viewSwap', function (event, data) {
 
-    if (data.name !== 'oneArtist') return $scope.showMe = false;
-    $scope.showMe = true;
+    // if ($stateParams.name !== 'oneArtist') return $scope.showMe = false;
+    // $scope.showMe = true;
 
-    ArtistFactory.fetchById(data.id)
+    ArtistFactory.fetchById($stateParams.artistId)
     .then(function (artist) {
       $scope.artist = artist;
     })
     .catch($log.error);
 
-  });
+  // });
 
   $scope.getCurrentSong = function () {
     return PlayerFactory.getCurrentSong();
@@ -61,3 +40,26 @@ juke.controller('ArtistCtrl', function ($scope, $log, ArtistFactory, PlayerFacto
   };
 
 });
+
+
+/* ARTISTS (PLURAL) CONTROLLER */
+
+juke.controller('MultiArtistController', function ($scope, $log, $rootScope, ArtistFactory) {
+
+  $scope.$on('viewSwap', function (event, data) {
+    if (data.name !== 'allArtists') return $scope.showMe = false;
+    $scope.showMe = true;
+  });
+
+  // $scope.viewOneArtist = function (artist) {
+  //   $rootScope.$broadcast('viewSwap', { name: 'oneArtist', id: artist.id });
+  // };
+
+  ArtistFactory.fetchAll()
+  .then(function (artists) {
+    $scope.artists = artists;
+  })
+  .catch($log.error);
+
+});
+
